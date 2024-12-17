@@ -13,34 +13,24 @@ namespace KonyvtarHttpClient.Services
         public static async Task<List<KonyvtarakDTO>> GetAll(HttpClient httpClient)
         {
             return await httpClient.GetFromJsonAsync<List<KonyvtarakDTO>>("Konyvtarak/GetDTO");
-            //var konyvtarLista = await httpClient.GetFromJsonAsync<List<KonyvtarakDTO>>(
-            //    "Konyvtarak/GetDTO");
-            //feltoltendo.Clear();
-            //konyvtarLista.ForEach(feltoltendo.Add);
         }
 
-        public static async Task Delete(HttpClient httpClient, int id)
+        public static async Task<string> Delete(HttpClient httpClient, int id)
         {
             try
             {
                 string uri = $"{httpClient.BaseAddress}Konyvtarak?id={id}";                
                 var response = await httpClient.DeleteAsync(uri);
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Sikeres törlés");
-                }
-                else
-                {
-                    MessageBox.Show("Hiba");
-                }
+                var valasz =  await response.Content.ReadAsStringAsync();
+                return valasz;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                return ex.Message;
             }
         }
 
-        public static async Task Post(HttpClient httpClient, Konyvtarak ujKonyvtar)
+        public static async Task<string> Post(HttpClient httpClient, Konyvtarak ujKonyvtar)
         {
             try
             {
@@ -51,20 +41,20 @@ namespace KonyvtarHttpClient.Services
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show($"Sikeres mentés. {content}");
+                    return content;
                 }
                 else
                 {
-                    MessageBox.Show($"Hiba: {response.StatusCode}\n {response.Content.Headers}\n{content}");
+                    return $"Hiba: {response.StatusCode}\n {response.Content.Headers}\n{content}";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                return ex.Message;
             }
         }
 
-        public static async Task Put(HttpClient httpClient, Konyvtarak ujKonyvtar)
+        public static async Task<string> Put(HttpClient httpClient, Konyvtarak ujKonyvtar)
         {
             try
             {
@@ -75,16 +65,16 @@ namespace KonyvtarHttpClient.Services
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show($"Sikeres mentés. {content}");
+                    return content;
                 }
                 else
                 {
-                    MessageBox.Show($"Hiba: {response.StatusCode}\n {response.Content.Headers}\n{content}");
+                    return $"Hiba: {response.StatusCode}\n {response.Content.Headers}\n{content}";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                return ex.Message;
             }
         }
     }

@@ -26,12 +26,10 @@ namespace KonyvtarHttpClient
         };
         private static List<KonyvtarakDTO> konyvtarak = new List<KonyvtarakDTO>();
 
-        public async MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
-            konyvtarak = await KonyvtarServices.GetAll(sharedClient);
-            Task.Delay(1000).Wait();
-            dgrAdatok.ItemsSource = konyvtarak;
+            FeltoltKonyvtar();
         }
 
         private void dgrAdatSelChanged(object sender, SelectionChangedEventArgs e)
@@ -57,11 +55,10 @@ namespace KonyvtarHttpClient
                 Cim = tbxCim.Text,
                 IrszNavigation = null
             };
-            await KonyvtarServices.Post(sharedClient, ujKonyvtar);
+            string valasz = await KonyvtarServices.Post(sharedClient, ujKonyvtar);
             Task.Delay(1000).Wait();
-            konyvtarak = await KonyvtarServices.GetAll(sharedClient);
-            Task.Delay(1000).Wait();
-            dgrAdatok.Items.Refresh();
+            MessageBox.Show(valasz);
+            FeltoltKonyvtar();
             dgrAdatok.SelectedIndex = 0;
 
         }
@@ -70,12 +67,11 @@ namespace KonyvtarHttpClient
         {
             if (MessageBox.Show($"Biztosan törlöd {tbxId.Text} azonosítójú könyvtárat?", "Törlés", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                await KonyvtarServices.Delete(sharedClient, int.Parse(tbxId.Text));
+                string valasz = await KonyvtarServices.Delete(sharedClient, int.Parse(tbxId.Text));
                 Task.Delay(1000).Wait();
+                MessageBox.Show(valasz);
             }
-            konyvtarak = await KonyvtarServices.GetAll(sharedClient);
-            Task.Delay(1000).Wait();
-            dgrAdatok.Items.Refresh();
+            FeltoltKonyvtar();
             dgrAdatok.SelectedIndex = 0;
         }
 
@@ -89,13 +85,18 @@ namespace KonyvtarHttpClient
                 Cim = tbxCim.Text,
                 IrszNavigation = null
             };
-            await KonyvtarServices.Put(sharedClient, ujKonyvtar);
+            string valasz = await KonyvtarServices.Put(sharedClient, ujKonyvtar);
             Task.Delay(1000).Wait();
-            KonyvtarServices.GetAll(sharedClient, konyvtarak);
-            Task.Delay(1000).Wait();
-            dgrAdatok.Items.Refresh();
+            MessageBox.Show(valasz);
+            FeltoltKonyvtar();
             dgrAdatok.SelectedIndex = 0;
         }
 
+        private async void FeltoltKonyvtar()
+        {
+            konyvtarak = await KonyvtarServices.GetAll(sharedClient);
+            Task.Delay(1000).Wait();
+            dgrAdatok.ItemsSource = konyvtarak;
+        }
     }
 }
