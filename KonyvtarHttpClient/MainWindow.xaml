@@ -1,0 +1,46 @@
+﻿<Window x:Class="KonyvtarHttpClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KonyvtarHttpClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel >
+            <Label Content="Id"/>
+            <TextBox x:Name="tbxId" IsReadOnly="True"/>
+            <Label Content="Könyvtárnév"/>
+            <TextBox x:Name="tbxKonyvtarNev" TextWrapping="NoWrap"/>
+            <Label Content="Irányítószám"/>
+            <TextBox x:Name="tbxIrsz"/>
+            <Label Content="Település"/>
+            <TextBox x:Name="tbxTelepnev" IsReadOnly="True"/>
+            <Label Content="Cím"/>
+            <TextBox x:Name="tbxCim"/>
+            <Label Content="Megye"/>
+            <TextBox x:Name="tbxMegyenev" IsReadOnly="True" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Új" 
+                        Click="UjKonyvtar"/>
+                <Button Content="Törlés"
+                        Click="TorolKonyvtar"/>
+                <Button Content="Módosítás" 
+                        Click="ModositKonyvtar"/>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Name="dgrAdatok"  
+                  Grid.Column="1"                  
+                  SelectionChanged="dgrAdatSelChanged"/>
+    </Grid>
+</Window>
