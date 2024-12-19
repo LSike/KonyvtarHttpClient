@@ -58,10 +58,21 @@ namespace KonyvtarHttpClient.Services
         {
             try
             {
-                string uj = JsonSerializer.Serialize(ujKonyvtar, JsonSerializerOptions.Default);
+                //A HTTP kérés részei a kódban
+                //line --> Method: PUT, url, (HTTP verzió kezelve)
+                //head --> Host (beépült a base url-be, azon keresztül az url-be)
+                //head --> Content-Type application/json, UTF8
+                //body --> serializált Json formátumban az ujKonyvtar
+
+                //a kérés előkésszítése
+                //url
                 string url = $"{httpClient.BaseAddress}Konyvtarak";
-                var request = new StringContent(uj, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync(url, request);
+                //body, mivel put kérésnél ez is kell
+                string uj = JsonSerializer.Serialize(ujKonyvtar, JsonSerializerOptions.Default);
+                var requestBody = new StringContent(uj, Encoding.UTF8, "application/json");
+                //elküldjük a kérést, itt dől el, hogy PUT a metódus, a response a választ tartalmazza későbbi feldolgozásra
+                var response = await httpClient.PutAsync(url, requestBody);
+                //kiolvassuk a válasz adatait, ami a backend végpontnál beállított szöveges üzenet, és a StatusCode alapján kiíratunk (ez nem lenne szükséges, a válasz elég informatív így is)
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
